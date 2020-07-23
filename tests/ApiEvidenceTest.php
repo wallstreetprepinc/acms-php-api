@@ -30,8 +30,8 @@ class ApiTestEvidence extends TestCase {
     public $group;
 
 	protected function setUp(){
-        $this->api = new Api("7b47e413b0216b489f0034960db4e84f", true);
-
+        //$this->api = new Api("7b47e413b0216b489f0034960db4e84f", true);
+        $this->api = new Api("api key here");
         // Create a group
         $group_name = $this->RandomString(20);
         $this->group = $this->api->create_group($group_name, "Test course", "Test course description.");

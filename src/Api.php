@@ -40,8 +40,9 @@ class Api {
     public function __construct($api_key, $test = null){
         $this->setAPIKey($api_key);
 
-        if (null !== $test) {
-    	    $this->api_endpoint = "https://staging.accredible.com/v1/";
+        if (! is_null($test) ) {
+    	    //$this->api_endpoint = "https://staging.accredible.com/v1/";
+             $this->api_endpoint = "https://sandbox.api.accredible.com/v1/";
     	}
     }
 
@@ -234,19 +235,24 @@ class Api {
 
 	/**
 	 * Create a new Group
+         *
+         * since all our groups with have course_id meta data I've not made meta_data parameter optional.
 	 * @param String $name
 	 * @param String $course_name
 	 * @param String $course_description
 	 * @param String|null $course_link
 	 * @return stdObject
 	 */
-	public function create_group($name, $course_name, $course_description, $course_link = null){
+	public function create_group($name, $course_name, $course_description, $meta_data = null,  $certificate_design_id = null, $badge_design_id = null ,  $course_link = null){
 		$data = array(
 		    "group" => array(
 		    	"name" => $name,
 		    	"course_name" => $course_name,
 				"course_description" => $course_description,
-    			"course_link" => $course_link
+    			"course_link" => $course_link,
+                        'meta_data'=>$meta_data,
+                        'certificate_design_id' => $certificate_design_id,
+                        'badge_design_id' => $badge_design_id
 		    )
 		);
 
@@ -281,11 +287,34 @@ class Api {
 	 * @param String $page_size
 	 * @param String $page
 	 * @return stdObject
+         * @deprecated since version 0.24
+         *
+         * note missing group name parameter
 	 */
-	public function get_groups($page_size = nil, $page = 1){
+	/*public function get_groups($page_size = nil, $page = 1){
 		$client = new \GuzzleHttp\Client();
 
 		$response = $client->get($this->api_endpoint.'issuer/all_groups?page_size=' . $page_size . '&page=' . $page, array('headers' =>  array('Authorization' => 'Token token="'.$this->getAPIKey().'"')));
+
+		$result = json_decode($response->getBody());
+		return $result;
+	}*/
+
+
+        /**
+         *
+         * @param type $name
+         * @param type $meta_data
+         * @param type $page
+         * @param type $page_size
+         * @return type
+         */
+        public function search_groups($name, $meta_data, $page = 1, $page_size=50){
+		$client = new \GuzzleHttp\Client();
+                $json_data = array('meta_data' => $meta_data, $page =>1,$page_size=>50); // not sure I can put the paging here
+
+
+		$response = $client->post($this->api_endpoint.'issuer/groups/search', array('headers' =>  array('Authorization' => 'Token token="'.$this->getAPIKey().'"'), 'json' => $json_data));
 
 		$result = json_decode($response->getBody());
 		return $result;

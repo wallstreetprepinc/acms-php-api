@@ -30,7 +30,8 @@ class ApiTest extends TestCase {
     public $group;
 
 	protected function setUp(){
-        $this->api = new Api("7b47e413b0216b489f0034960db4e84f", true);
+        //$this->api = new Api("7b47e413b0216b489f0034960db4e84f", true);
+          $this->api = new Api("api key here");
 
         // Create a group
         $group_name = $this->RandomString(20);
@@ -151,6 +152,136 @@ class ApiTest extends TestCase {
 
 		//cleanup
 		$response = $this->api->delete_group($group->group->id);
+    }
+
+
+    /**
+     * @group
+     */
+    public function testCreateCompleteGroup()
+    {
+        $group_name = $this->RandomString(20);
+        $course_name = "Test course with meta";
+        $course_description = "Test course description.";
+        $course_id  = 20;
+        $meta_data = array('course_id' => $course_id, 'award_type' => 'course_completion');
+
+        // TODO create test cert and badges,  these are  existing ones,
+        $cert_design_id = 176907;
+        $badge_id = 177077;
+        try
+        {
+            // Can we create a Group
+            $group = $this->api->create_group($group_name, $course_name, $course_description ,$meta_data,$cert_design_id,  $badge_id);
+            echo 'Group:',print_r($group,true);
+            $g = $group->group;
+            $this->assertEquals($group_name, $g->name);
+            $this->assertEquals($course_name,$g->course_name);
+            $this->assertEquals($course_description, $g->course_description);
+            $this->assertEquals($meta_data['course_id'], $g->meta_data->course_id);
+            $this->assertEquals($meta_data['award_type'], $g->meta_data->award_type);
+            $this->assertEquals($cert_design_id, $g->certificate_design_id);
+            $this->assertEquals($badge_id, $g->badge_design_id);
+        }
+        finally { //cleanup
+            if($group->group->id){
+                $response = $this->api->delete_group($group->group->id);
+            }
+        }
+
+
+
+    }
+
+
+    /**
+     * @group
+     */
+    public function testSearchGroups(){
+        $group_name = $this->RandomString(20);
+        $course_name = "Test course with meta";
+        $course_description = "Test course description.";
+        $course_id  = 20;
+        // TODO create test cert and badges,  these are  existing ones,
+        $cert_design_id = 176907;
+        $badge_id = 177077;
+        $meta_data = array('course_id' => $course_id, 'award_type' => 'course_completion');
+
+        try
+        {
+
+            // Can we create a Group
+            $group = $this->api->create_group($group_name, $course_name, $course_description , $meta_data, $cert_design_id, $badge_id);
+            $this->assertEquals($group_name, $group->group->name);
+            echo 'Group:',print_r($group,true);
+              // search for group
+            $groups = $this->api->search_groups($group_name, $meta_data );
+            echo 'search:', print_r($groups, true);
+            // expect one group
+            $this->assertEquals(1, count($groups->groups));
+            $found_group = $groups->groups[0];
+
+            $this->assertEquals($group_name, $found_group->name);
+            $this->assertEquals($course_name,$found_group->course_name);
+            $this->assertEquals($meta_data['course_id'], $found_group->meta_data->course_id);
+            $this->assertEquals($meta_data['award_type'], $found_group->meta_data->award_type);
+            $this->assertEquals($cert_design_id, $found_group->certificate_design_id);
+            $this->assertEquals($badge_id, $found_group->badge_design_id);
+
+        }
+        finally {
+            //cleanup
+           if($group->group->id){
+                $response = $this->api->delete_group($group->group->id);
+            }
+        }
+
+
+    }
+
+
+    /**
+     * Search using Group Meta only .
+     * @group wip
+     */
+     public function testSearchGroupsMetaOnly(){
+        $group_name = $this->RandomString(20);
+        $course_name = "Test course with meta";
+        $course_description = "Test course description.";
+        $course_id  = 20;
+        // TODO create test cert and badges,  these are  existing ones,
+        $cert_design_id = 176907;
+        $badge_id = 177077;
+        $meta_data = array('course_id' => $course_id, 'award_type' => 'course_completion');
+
+    	// Can we create a Group
+        $group = $this->api->create_group($group_name,$course_name, $course_description, $meta_data, $cert_design_id, $badge_id);
+        $this->assertEquals($group_name, $group->group->name);
+        echo 'Group:',print_r($group,true);
+
+        // search for group using meta only
+        try
+        {
+            $groups = $this->api->search_groups(null, $meta_data );
+            echo 'search:', print_r($groups, true);
+            // expect one group
+            $this->assertEquals(1, count($groups->groups));
+            $found_group = $groups->groups[0];
+
+            $this->assertEquals($group_name, $found_group->name);
+            $this->assertEquals($course_name,$found_group->course_name);
+            $this->assertEquals($meta_data['course_id'], $found_group->meta_data->course_id);
+            $this->assertEquals($meta_data['award_type'], $found_group->meta_data->award_type);
+            $this->assertEquals($cert_design_id, $found_group->certificate_design_id);
+            $this->assertEquals($badge_id, $found_group->badge_design_id);
+        }
+        finally {
+        //cleanup
+            if($group->group->id){
+                $response = $this->api->delete_group($group->group->id);
+            }
+        }
+
     }
 
     public function testUpdateGroup(){
