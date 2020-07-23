@@ -1,11 +1,15 @@
 {
-    "name": "accredible/acms-api-php",
-    "description": "PHP wrappers for Accredible ACMS API",
+    "name": "accredible/wsp-acms-api-php",
+    "description": "PHP wrappers for Accredible ACMS API. Modified and updated by Wall Streep Prep.",
     "license": "MIT",
     "authors": [
         {
             "name": "Alan Heppenstall",
             "email": "alan@accredible.com"
+        },
+        {
+            "name": "Desmond Sheeran",
+            "email": "dsheeran@wallstreetprep.com"
         }
     ],
     "minimum-stability": "dev",
