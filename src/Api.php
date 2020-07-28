@@ -97,6 +97,7 @@ class Api {
 
 	/**
 	 * Creates a Credential given an existing Group
+         * @param string $group_id
 	 * @param String $recipient_name
 	 * @param String $recipient_email
 	 * @param String $course_id
@@ -105,18 +106,20 @@ class Api {
 	 * @param stdObject|null $custom_attributes
 	 * @return stdObject
 	 */
-	public function create_credential($recipient_name, $recipient_email, $course_id, $issued_on = null, $expired_on = null, $custom_attributes = null){
+	public function create_credential($recipient_name, $recipient_email, $group_id, $user_id, $meta_data = null, $custom_attributes = null, $issued_on = null, $expired_on = null){
 
 		$data = array(
 		    "credential" => array(
-		    	"group_id" => $course_id,
+		    	"group_id" => $group_id,
 		        "recipient" => array(
 		            "name" => $recipient_name,
-		            "email" => $recipient_email
+		            "email" => $recipient_email,
+                            'id' => $user_id
 		        ),
 		        "issued_on" => $issued_on,
 		        "expired_on" => $expired_on,
-		        "custom_attributes" => $custom_attributes
+		        "custom_attributes" => $custom_attributes,
+                        "meta_data" => $meta_data
 		    )
 		);
 
