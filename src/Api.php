@@ -83,6 +83,8 @@ class Api {
 	 * @param String|null $page_size
 	 * @param String $page
 	 * @return stdObject
+         * @deprecated since version 0.25
+         * TODO replace with method using /credentials/search end point 
 	 */
 	public function get_credentials($group_id = null, $email = null, $page_size = null, $page = 1){
 		$client = new \GuzzleHttp\Client();
