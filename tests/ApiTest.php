@@ -31,7 +31,7 @@ class ApiTest extends TestCase {
 
 	protected function setUp(){
         //$this->api = new Api("7b47e413b0216b489f0034960db4e84f", true);
-          $this->api = new Api("api key here");
+          $this->api = new Api("key");
 
         // Create a group
         $group_name = $this->RandomString(20);
@@ -203,7 +203,7 @@ class ApiTest extends TestCase {
 
 
     /**
-     * @group
+     * @group WIP
      */
     public function testCreateCompleteGroup()
     {
@@ -215,7 +215,7 @@ class ApiTest extends TestCase {
 
         // TODO create test cert and badges,  these are  existing ones,
         $cert_design_id = 176907;
-        $badge_id = 177077;
+        $badge_id = 179453;
         try
         {
             // Can we create a Group
@@ -251,7 +251,7 @@ class ApiTest extends TestCase {
         $course_id  = 20;
         // TODO create test cert and badges,  these are  existing ones,
         $cert_design_id = 176907;
-        $badge_id = 177077;
+        $badge_id = 179453;
         $meta_data = array('course_id' => $course_id, 'award_type' => 'course_completion');
 
         try
@@ -298,7 +298,7 @@ class ApiTest extends TestCase {
         $course_id  = 20;
         // TODO create test cert and badges,  these are  existing ones,
         $cert_design_id = 176907;
-        $badge_id = 177077;
+        $badge_id = 179453;
         $meta_data = array('course_id' => $course_id, 'award_type' => 'course_completion');
 
     	// Can we create a Group
