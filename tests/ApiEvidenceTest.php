@@ -17,6 +17,9 @@ use PHPUnit\Framework\TestCase;
 // TODO: Add mocked response tests for speed
 
 class ApiTestEvidence extends TestCase {
+    
+    private $group;
+    private $credential;
 
     // backward compatibility
     public function expectException($exception) {
@@ -27,17 +30,17 @@ class ApiTestEvidence extends TestCase {
         }
     }
 
-    public $group;
-
-	protected function setUp(){
-        //$this->api = new Api("7b47e413b0216b489f0034960db4e84f", true);
+    
+    protected function setUp(){
+        
         $this->api = new Api("api key here");
         // Create a group
         $group_name = $this->RandomString(20);
         $this->group = $this->api->create_group($group_name, "Test course", "Test course description.");
 
         // Create a credential
-        $this->credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id);
+        $user_id = 42;
+        $this->credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id, $user_id);
     }
 
     protected function tearDown(){

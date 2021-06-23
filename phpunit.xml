@@ -1,4 +1,4 @@
-<phpunit bootstrap="./vendor/autoload.php" backupGlobals="false" colors="true">
+<phpunit bootstrap="./../../autoload.php" backupGlobals="false" colors="true">
 	<!--<php>
         <server name="API_KEY" value="change_me" />
     </php>-->

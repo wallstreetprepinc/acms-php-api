@@ -27,10 +27,10 @@ class ApiTest extends TestCase {
         }
     }
 
-    public $group;
+    private $group;
 
 	protected function setUp(){
-        //$this->api = new Api("7b47e413b0216b489f0034960db4e84f", true);
+        
           $this->api = new Api("api key here");
 
         // Create a group
@@ -56,68 +56,115 @@ class ApiTest extends TestCase {
 
     public function testSetAPIKey(){
         // Check the API key is set
-        $this->assertEquals("7b47e413b0216b489f0034960db4e84f", $this->api->getAPIKey());
+        $api_key = "7b47e413b0216b489f0034960db4e84f";
+        $api = new Api($api_key);
+        $this->assertEquals($api_key, $api->getAPIKey());
     }
 
     public function testGetCredential(){
-        $new_credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id);
+        $user_id  = 45;
+        $email = "john@example.com";
+        $name = "John Doe";
+        try 
+        {
+            $new_credential = $this->api->create_credential($name, $email, $this->group->group->id, $user_id);
 
     	// Check if we can get a Credential
-        $example_credential = $this->api->get_credential($new_credential->credential->id);
-		$this->assertEquals($new_credential->credential->id, $example_credential->credential->id);
-
+            $example_credential = $this->api->get_credential($new_credential->credential->id);
+            $this->assertEquals($new_credential->credential->id, $example_credential->credential->id);
+            $this->assertEquals($email, $example_credential->credential->recipient->email);
+            $this->assertEquals($name, $example_credential->credential->recipient->name);
+             
+        }
+        finally {
         //cleanup
-        $this->api->delete_credential($new_credential->credential->id);
+            $this->api->delete_credential($new_credential->credential->id);     
+        }
+       
     }
 
     public function testGetCredentials(){
-    	$new_credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id);
+        $user_id = 45;
+    	
 
     	// Check if we can get credentials given an email
+        try 
+        {
+                $new_credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id, $user_id);
 		$example_credentials = $this->api->get_credentials(null, "john@example.com", 1);
 		$example_credential = array_values($example_credentials->credentials)[0];
 
 		$this->assertEquals("john@example.com", $example_credential->recipient->email);
-
-		//cleanup
+        }
+        finally 
+        {
+            //cleanup
 		$this->api->delete_credential($new_credential->credential->id);
+        }
+		
     }
 
     public function testCreateCredential(){
     	//Check we can create a Credential
-		$new_credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id);
-		$this->assertEquals("John Doe", $new_credential->credential->recipient->name);
-
-		//cleanup
+        $name = "John Doe";
+        $user_id = 45;
+        try
+        {
+		$new_credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id, $user_id);
+		$this->assertEquals($name, $new_credential->credential->recipient->name);
+        }
+        finally 
+        {
+            //cleanup
 		$this->api->delete_credential($new_credential->credential->id);
+        }
+		
     }
 
     public function testCreateCredentialLegacy(){
         //Check we can create a Credential
-        $new_credential = $this->api->create_credential_legacy("John Doe", "john@example.com", $this->group->group->name);
-        $this->assertEquals("John Doe", $new_credential->credential->recipient->name);
-
-        //cleanup
-        $this->api->delete_credential($new_credential->credential->id);
+        $name = "John Doe";
+        try 
+        {
+            $new_credential = $this->api->create_credential_legacy("John Doe", "john@example.com", $this->group->group->name);
+            $this->assertEquals("John Doe", $new_credential->credential->recipient->name);
+        }
+        finally 
+        {
+            //cleanup
+            $this->api->delete_credential($new_credential->credential->id);
+        }
+        
     }
 
-    public function testUpdateCredential(){
-    	$new_credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id);
+    public function testUpdateCredential()
+    {
+        $user_id = 45;
+        try 
+        {
+            $new_credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id, $user_id);
 
     	//Check we can update a Credential
-		$updated_credential = $this->api->update_credential($new_credential->credential->id, "Jonathan Doe");
-		$this->assertEquals("Jonathan Doe", $updated_credential->credential->recipient->name);
-
-		//cleanup
+            $name = "Jonathan Doe";
+            $updated_credential = $this->api->update_credential($new_credential->credential->id, $name);
+            $this->assertEquals($name, $updated_credential->credential->recipient->name);
+        }
+        finally {
+            //cleanup
 		$this->api->delete_credential($updated_credential->credential->id);
+        }
+		
     }
 
-    public function testDeleteCredential(){
-    	$new_credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id);
+    public function testDeleteCredential()
+    {
+        $user_id = 45;
+               
+        $new_credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id, $user_id);
 
     	// Can we delete a Credential
-		$response = $this->api->delete_credential($new_credential->credential->id);
-		$this->assertEquals("John Doe", $response->credential->recipient->name);
+        $response = $this->api->delete_credential($new_credential->credential->id);
+        $this->assertEquals("John Doe", $response->credential->recipient->name);
     }
 
     public function testGetGroup(){
@@ -173,7 +220,7 @@ class ApiTest extends TestCase {
         {
             // Can we create a Group
             $group = $this->api->create_group($group_name, $course_name, $course_description ,$meta_data,$cert_design_id,  $badge_id);
-            echo 'Group:',print_r($group,true);
+            //echo 'Group:',print_r($group,true);
             $g = $group->group;
             $this->assertEquals($group_name, $g->name);
             $this->assertEquals($course_name,$g->course_name);
@@ -213,10 +260,10 @@ class ApiTest extends TestCase {
             // Can we create a Group
             $group = $this->api->create_group($group_name, $course_name, $course_description , $meta_data, $cert_design_id, $badge_id);
             $this->assertEquals($group_name, $group->group->name);
-            echo 'Group:',print_r($group,true);
+            //echo 'Group:',print_r($group,true);
               // search for group
             $groups = $this->api->search_groups($group_name, $meta_data );
-            echo 'search:', print_r($groups, true);
+            //echo 'search:', print_r($groups, true);
             // expect one group
             $this->assertEquals(1, count($groups->groups));
             $found_group = $groups->groups[0];
@@ -257,13 +304,13 @@ class ApiTest extends TestCase {
     	// Can we create a Group
         $group = $this->api->create_group($group_name,$course_name, $course_description, $meta_data, $cert_design_id, $badge_id);
         $this->assertEquals($group_name, $group->group->name);
-        echo 'Group:',print_r($group,true);
+        //echo 'Group:',print_r($group,true);
 
         // search for group using meta only
         try
         {
             $groups = $this->api->search_groups(null, $meta_data );
-            echo 'search:', print_r($groups, true);
+            //echo 'search:', print_r($groups, true);
             // expect one group
             $this->assertEquals(1, count($groups->groups));
             $found_group = $groups->groups[0];
@@ -316,7 +363,7 @@ class ApiTest extends TestCase {
         $requested_designs = $this->api->get_designs(1, 1);
         $this->api->update_group($this->group->group->id, null, null, null, null, $requested_designs->designs{0}->id);
 
-        $credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id);
+        $credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id,45);
 
         // Can we create a recipient redirect link
         $redirect = $this->api->recipient_sso_link(null, null, "john@example.com", null, $this->group->group->id);
@@ -339,19 +386,32 @@ class ApiTest extends TestCase {
                 "course_link" => "https://www.accredible.com"
             )
         );
+        $user_id  = 45;
+        $email = "john@example.com";
+        $name = "John Doe";
+     
+        try 
+        {
+            // create a cred
+            $new_credential = $this->api->create_credential($name, $email, $this->group->group->id, $user_id);
+            $id = $new_credential->credential->id;
+            $requests = [
+                ["method" => "get",    "url" => "/v1/credentials/{$id}"],
+                ["method" => "post",   "url" => "/v1/issuer/groups",        "params" => $group_data]
+            ];
 
-        $requests = [
-            ["method" => "get",    "url" => "/v1/credentials/10000005"],
-            ["method" => "post",   "url" => "/v1/issuer/groups",        "params" => $group_data]
-        ];
+            $response = $this->api->send_batch_requests($requests);
 
-        $response = $this->api->send_batch_requests($requests);
+            $response1 = json_decode($response->results[0]->body);
+            $this->assertEquals($id, $response1->credential->id);
 
-        $response1 = json_decode($response->results[0]->body);
-        $this->assertEquals("10000005", $response1->credential->id);
-
-        $response2 = json_decode($response->results[1]->body);
-        $this->assertEquals($group_name, $response2->group->name);
+            $response2 = json_decode($response->results[1]->body);
+            $this->assertEquals($group_name, $response2->group->name);
+        }        
+        finally 
+        {
+             $this->api->delete_credential($new_credential->credential->id);
+        }
 
     }
 
