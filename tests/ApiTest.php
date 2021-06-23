@@ -33,6 +33,7 @@ class ApiTest extends TestCase {
         
           $this->api = new Api("api key here");
 
+
         // Create a group
         $group_name = $this->RandomString(20);
         $this->group = $this->api->create_group($group_name, "Test course", "Test course description.");
@@ -65,7 +66,11 @@ class ApiTest extends TestCase {
         $user_id  = 45;
         $email = "john@example.com";
         $name = "John Doe";
+<<<<<<< HEAD
         try 
+=======
+        try
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
         {
             $new_credential = $this->api->create_credential($name, $email, $this->group->group->id, $user_id);
 
@@ -74,6 +79,7 @@ class ApiTest extends TestCase {
             $this->assertEquals($new_credential->credential->id, $example_credential->credential->id);
             $this->assertEquals($email, $example_credential->credential->recipient->email);
             $this->assertEquals($name, $example_credential->credential->recipient->name);
+<<<<<<< HEAD
              
         }
         finally {
@@ -81,14 +87,30 @@ class ApiTest extends TestCase {
             $this->api->delete_credential($new_credential->credential->id);     
         }
        
+=======
+
+        }
+        finally {
+        //cleanup
+            $this->api->delete_credential($new_credential->credential->id);
+        }
+
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
     }
 
     public function testGetCredentials(){
         $user_id = 45;
+<<<<<<< HEAD
     	
 
     	// Check if we can get credentials given an email
         try 
+=======
+
+
+    	// Check if we can get credentials given an email
+        try
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
         {
                 $new_credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id, $user_id);
 		$example_credentials = $this->api->get_credentials(null, "john@example.com", 1);
@@ -96,12 +118,20 @@ class ApiTest extends TestCase {
 
 		$this->assertEquals("john@example.com", $example_credential->recipient->email);
         }
+<<<<<<< HEAD
         finally 
+=======
+        finally
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
         {
             //cleanup
 		$this->api->delete_credential($new_credential->credential->id);
         }
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
     }
 
     public function testCreateCredential(){
@@ -113,34 +143,58 @@ class ApiTest extends TestCase {
 		$new_credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id, $user_id);
 		$this->assertEquals($name, $new_credential->credential->recipient->name);
         }
+<<<<<<< HEAD
         finally 
+=======
+        finally
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
         {
             //cleanup
 		$this->api->delete_credential($new_credential->credential->id);
         }
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
     }
 
     public function testCreateCredentialLegacy(){
         //Check we can create a Credential
         $name = "John Doe";
+<<<<<<< HEAD
         try 
+=======
+        try
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
         {
             $new_credential = $this->api->create_credential_legacy("John Doe", "john@example.com", $this->group->group->name);
             $this->assertEquals("John Doe", $new_credential->credential->recipient->name);
         }
+<<<<<<< HEAD
         finally 
+=======
+        finally
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
         {
             //cleanup
             $this->api->delete_credential($new_credential->credential->id);
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
     }
 
     public function testUpdateCredential()
     {
         $user_id = 45;
+<<<<<<< HEAD
         try 
+=======
+        try
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
         {
             $new_credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id, $user_id);
 
@@ -153,13 +207,21 @@ class ApiTest extends TestCase {
             //cleanup
 		$this->api->delete_credential($updated_credential->credential->id);
         }
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
     }
 
     public function testDeleteCredential()
     {
         $user_id = 45;
+<<<<<<< HEAD
                
+=======
+
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
         $new_credential = $this->api->create_credential("John Doe", "john@example.com", $this->group->group->id, $user_id);
 
     	// Can we delete a Credential
@@ -203,7 +265,7 @@ class ApiTest extends TestCase {
 
 
     /**
-     * @group
+     * @group WIP
      */
     public function testCreateCompleteGroup()
     {
@@ -215,7 +277,7 @@ class ApiTest extends TestCase {
 
         // TODO create test cert and badges,  these are  existing ones,
         $cert_design_id = 176907;
-        $badge_id = 177077;
+        $badge_id = 179453;
         try
         {
             // Can we create a Group
@@ -251,7 +313,7 @@ class ApiTest extends TestCase {
         $course_id  = 20;
         // TODO create test cert and badges,  these are  existing ones,
         $cert_design_id = 176907;
-        $badge_id = 177077;
+        $badge_id = 179453;
         $meta_data = array('course_id' => $course_id, 'award_type' => 'course_completion');
 
         try
@@ -298,7 +360,7 @@ class ApiTest extends TestCase {
         $course_id  = 20;
         // TODO create test cert and badges,  these are  existing ones,
         $cert_design_id = 176907;
-        $badge_id = 177077;
+        $badge_id = 179453;
         $meta_data = array('course_id' => $course_id, 'award_type' => 'course_completion');
 
     	// Can we create a Group
@@ -389,8 +451,13 @@ class ApiTest extends TestCase {
         $user_id  = 45;
         $email = "john@example.com";
         $name = "John Doe";
+<<<<<<< HEAD
      
         try 
+=======
+
+        try
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
         {
             // create a cred
             $new_credential = $this->api->create_credential($name, $email, $this->group->group->id, $user_id);
@@ -407,8 +474,13 @@ class ApiTest extends TestCase {
 
             $response2 = json_decode($response->results[1]->body);
             $this->assertEquals($group_name, $response2->group->name);
+<<<<<<< HEAD
         }        
         finally 
+=======
+        }
+        finally
+>>>>>>> 5f8e03c79d521517289456d118ecfe6b0d28cc22
         {
              $this->api->delete_credential($new_credential->credential->id);
         }

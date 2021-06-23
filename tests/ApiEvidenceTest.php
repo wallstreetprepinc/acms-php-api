@@ -21,6 +21,9 @@ class ApiTestEvidence extends TestCase {
     private $group;
     private $credential;
 
+    private $group;
+    private $credential;
+
     // backward compatibility
     public function expectException($exception) {
         if (!method_exists('TestCase','expectException')) {
@@ -30,9 +33,11 @@ class ApiTestEvidence extends TestCase {
         }
     }
 
-    
+
+
     protected function setUp(){
-        
+       
+
         $this->api = new Api("api key here");
         // Create a group
         $group_name = $this->RandomString(20);

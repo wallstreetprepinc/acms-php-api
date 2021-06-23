@@ -380,7 +380,7 @@ class Api {
      * @param String $page
      * @return stdObject
      */
-    public function get_designs($page_size = nil, $page = 1){
+    public function get_designs($page_size, $page = 1){
         $client = new \GuzzleHttp\Client();
 
         $response = $client->get($this->api_endpoint.'issuer/all_designs?page_size=' . $page_size . '&page=' . $page, array('headers' =>  array('Authorization' => 'Token token="'.$this->getAPIKey().'"')));
